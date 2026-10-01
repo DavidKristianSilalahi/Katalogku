@@ -1,5 +1,7 @@
 # KatalogKu
 
+![KatalogKu - aplikasi katalog dan toko online](image.png)
+
 Aplikasi katalog dan toko online sederhana berbasis ASP.NET Core Razor Pages, .NET 9, Entity Framework Core, dan SQLite.
 
 ## Fitur
