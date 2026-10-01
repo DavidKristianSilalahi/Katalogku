@@ -1,0 +1,64 @@
+@page "{id:int}"
+@model EditModel
+@{
+    ViewData["Title"] = "Edit Produk";
+}
+
+<section class="form-page">
+    <a class="back-link" asp-page="/Index">&larr; Kembali ke katalog</a>
+    <div class="form-heading">
+        <p class="eyebrow">Perbarui katalog</p>
+        <h1>Edit produk</h1>
+        <p>Sesuaikan detail produk yang sudah tersimpan.</p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="product-form">
+        <input type="hidden" asp-for="Product.Id" />
+        <input type="hidden" asp-for="Product.CreatedAt" />
+        <div asp-validation-summary="ModelOnly" class="validation"></div>
+        <div class="field-grid">
+            <div class="field field-wide image-editor">
+                <label>Foto produk</label>
+                @if (!string.IsNullOrWhiteSpace(Model.Product.ImagePath))
+                {
+                    <img class="edit-image-preview" src="@Model.Product.ImagePath" alt="@Model.Product.Name" />
+                }
+                else
+                {
+                    <div class="edit-image-empty">Belum ada foto</div>
+                }
+                <input asp-for="ImageFile" accept=".jpg,.jpeg,.png,.webp" />
+                <small class="field-help">Pilih foto baru untuk mengganti gambar saat ini. Maksimal 2 MB.</small>
+                <span asp-validation-for="ImageFile" class="validation"></span>
+            </div>
+            <div class="field field-wide">
+                <label asp-for="Product.Name"></label>
+                <input asp-for="Product.Name" placeholder="Contoh: Wireless Headphone" />
+                <span asp-validation-for="Product.Name" class="validation"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Product.Category"></label>
+                <input asp-for="Product.Category" placeholder="Contoh: Elektronik" />
+                <span asp-validation-for="Product.Category" class="validation"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Product.Price"></label>
+                <input asp-for="Product.Price" type="number" step="1000" />
+                <span asp-validation-for="Product.Price" class="validation"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Product.Stock"></label>
+                <input asp-for="Product.Stock" type="number" />
+                <span asp-validation-for="Product.Stock" class="validation"></span>
+            </div>
+        </div>
+        <div class="form-actions">
+            <a class="button button-muted" asp-page="/Index">Batal</a>
+            <button class="button button-primary" type="submit">Simpan perubahan</button>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

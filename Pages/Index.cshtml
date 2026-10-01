@@ -1,0 +1,73 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Katalog Produk";
+}
+
+<section class="hero">
+    <div>
+        <p class="eyebrow">Manajemen inventaris</p>
+        <h1>Katalog produk<br /><em>yang lebih tertata.</em></h1>
+        <p class="hero-copy">Simpan, pantau, dan perbarui produk dalam satu ruang kerja kecil yang praktis.</p>
+    </div>
+    <div class="hero-mark" aria-hidden="true"><span>CRUD</span><strong>01</strong></div>
+</section>
+
+@if (TempData["Message"] is string message)
+{
+    <div class="alert">@message</div>
+}
+
+<div class="content-grid">
+    <section class="panel catalog-panel">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Inventaris</p>
+                <h2>Semua produk <span>@Model.Products.Count.ToString("D2")</span></h2>
+            </div>
+        </div>
+        @if (Model.Products.Count == 0)
+        {
+            <div class="empty-state">Belum ada produk. Tambahkan produk pertama dari formulir di samping.</div>
+        }
+        else
+        {
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>Produk</th><th>Kategori</th><th>Harga</th><th>Stok</th><th></th></tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var product in Model.Products)
+                    {
+                        <tr>
+                            <td class="product-cell"><div class="product-image">@if (!string.IsNullOrWhiteSpace(product.ImagePath)) { <img src="@product.ImagePath" alt="@product.Name" /> } else { <span>IMG</span> }</div><div><strong>@product.Name</strong><small>@product.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")</small></div></td>
+                            <td><span class="category">@product.Category</span></td>
+                            <td>@product.Price.ToString("C0", new System.Globalization.CultureInfo("id-ID"))</td>
+                            <td>@product.Stock</td>
+                            <td class="actions"><a asp-page="/Edit" asp-route-id="@product.Id" aria-label="Edit @product.Name">Edit</a><form method="post" asp-page-handler="Delete" asp-route-id="@product.Id" onsubmit="return confirm('Hapus produk ini?');"><button type="submit" aria-label="Hapus @product.Name">Hapus</button></form></td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+
+    <section class="panel add-panel">
+        <p class="eyebrow">Produk baru</p>
+        <h2>Tambah item</h2>
+        <form method="post" enctype="multipart/form-data" class="product-form">
+            <div asp-validation-summary="ModelOnly" class="validation"></div>
+            <div class="field"><label asp-for="Product.Name"></label><input asp-for="Product.Name" placeholder="Contoh: Wireless Headphone" /><span asp-validation-for="Product.Name" class="validation"></span></div>
+            <div class="field"><label asp-for="Product.Category"></label><input asp-for="Product.Category" placeholder="Contoh: Elektronik" /><span asp-validation-for="Product.Category" class="validation"></span></div>
+            <div class="field-row"><div class="field"><label asp-for="Product.Price"></label><input asp-for="Product.Price" type="number" step="1000" placeholder="0" /><span asp-validation-for="Product.Price" class="validation"></span></div><div class="field"><label asp-for="Product.Stock"></label><input asp-for="Product.Stock" type="number" placeholder="0" /><span asp-validation-for="Product.Stock" class="validation"></span></div></div>
+            <div class="field"><label asp-for="ImageFile">Foto produk</label><input asp-for="ImageFile" accept=".jpg,.jpeg,.png,.webp" /><small class="field-help">JPG, PNG, atau WebP. Maksimal 2 MB.</small><span asp-validation-for="ImageFile" class="validation"></span></div>
+            <button class="button button-primary button-full" type="submit">Tambahkan produk <span>&rarr;</span></button>
+        </form>
+    </section>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

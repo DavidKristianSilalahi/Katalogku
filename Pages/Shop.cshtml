@@ -1,0 +1,12 @@
+@page
+@model ShopModel
+@{ ViewData["Title"] = "Belanja"; }
+<section class="shop-hero"><div><p class="eyebrow">Koleksi pilihan</p><h1>Belanja dengan<br /><em>ritme sendiri.</em></h1><p class="hero-copy">Produk terkurasi untuk hari-hari yang lebih ringan. Pilih, simpan, dan checkout saat siap.</p></div><div class="hero-stamp"><span>SHOP</span><strong>@Model.Products.Count.ToString("D2")</strong><small>items ready</small></div></section>
+@if (TempData["Message"] is string message) { <div class="alert">@message</div> }
+<div class="shop-toolbar"><div><p class="eyebrow">Katalog hari ini</p><h2>Semua produk <span>@Model.Products.Count.ToString("D2")</span></h2></div><a class="button button-dark cart-button" asp-page="/Cart"><span class="cart-icon" aria-hidden="true">&#128722;</span> Keranjang <span>&rarr;</span></a></div>
+<div class="product-grid">
+@foreach (var product in Model.Products)
+{
+    <article class="product-card"><div class="product-card-image">@if (!string.IsNullOrWhiteSpace(product.ImagePath)) { <img src="@product.ImagePath" alt="@product.Name" /> } else { <span>NO IMAGE</span> }<div class="product-badge">@product.Category</div></div><div class="product-card-body"><div><p class="product-category">@product.Category</p><h3>@product.Name</h3></div><p class="product-description">Persediaan pilihan untuk melengkapi kebutuhanmu.</p><div class="product-card-footer"><strong>@product.Price.ToString("C0", new System.Globalization.CultureInfo("id-ID"))</strong><span class="stock">@product.Stock tersedia</span></div><div class="product-actions"><form method="post" asp-page-handler="Order" asp-route-id="@product.Id"><button class="button button-primary order-button" type="submit" disabled="@(product.Stock == 0)">@(product.Stock == 0 ? "Stok habis" : "Pesan sekarang") <span>&rarr;</span></button></form><form method="post" asp-page-handler="Add" asp-route-id="@product.Id"><button class="icon-button" type="submit" disabled="@(product.Stock == 0)" title="Simpan ke keranjang" aria-label="Simpan @product.Name ke keranjang"><span class="cart-icon" aria-hidden="true">&#128722;</span></button></form></div></div></article>
+}
+</div>

@@ -1,0 +1,12 @@
+@page
+@model LoginModel
+@{ ViewData["Title"] = "Masuk"; }
+<div class="auth-shell">
+    <div class="auth-art"><p class="eyebrow">KatalogKu / ruang belanja</p><h1>Temukan barang<br /><em>yang terasa tepat.</em></h1><p>Masuk untuk menyimpan keranjang dan melanjutkan pesananmu.</p></div>
+    <div class="auth-card"><div class="eyebrow">Selamat datang kembali</div><h2>Masuk ke akun</h2>
+        @if (TempData["Message"] is string message) { <div class="alert">@message</div> }
+        @if (Model.ErrorMessage is not null) { <div class="validation">@Model.ErrorMessage</div> }
+        <form method="post" class="auth-form"><input type="hidden" asp-for="ReturnUrl" /><div class="field"><label asp-for="Username">Username</label><input asp-for="Username" autocomplete="username" placeholder="Masukkan username" /></div><div class="field"><label asp-for="Password">Password</label><input asp-for="Password" type="password" autocomplete="current-password" placeholder="Masukkan password" /></div><button class="button button-primary button-full" type="submit">Masuk <span>&rarr;</span></button></form>
+        <p class="auth-note">Belum punya akun? <a asp-page="/Register">Daftar sekarang</a></p><div class="demo-login"><strong>Akun demo</strong><span>user / user123</span><span>admin / admin123</span></div>
+    </div>
+</div>
